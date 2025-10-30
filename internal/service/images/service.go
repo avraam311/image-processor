@@ -10,8 +10,8 @@ import (
 )
 
 type Repository interface {
-	UploadImage(context.Context, string) (uint, error)
-	GetProcessedImage(context.Context, uint) error
+	SetImageStatus(context.Context, string) (uint, error)
+	CheckImage(context.Context, uint) error
 	ChangeImageStatus(context.Context, uint) error
 }
 

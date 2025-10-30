@@ -20,7 +20,7 @@ const (
 )
 
 func (s *Service) UploadImage(ctx context.Context, im *models.Image) (uint, error) {
-	id, err := s.repo.UploadImage(ctx, imageStatusInProcess)
+	id, err := s.repo.SetImageStatus(ctx, imageStatusInProcess)
 	if err != nil {
 		return 0, fmt.Errorf("service/upload_image.go - %w", err)
 	}

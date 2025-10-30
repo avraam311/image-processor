@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Service) GetProcessedImage(ctx context.Context, id uint) ([]byte, error) {
-	err := s.repo.GetProcessedImage(ctx, id)
+	err := s.repo.CheckImage(ctx, id)
 	if err != nil {
 		return []byte{}, fmt.Errorf("service/images - %w", err)
 	}
