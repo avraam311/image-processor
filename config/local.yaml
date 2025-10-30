@@ -1,2 +1,10 @@
 server:
   gin_mode: ""
+
+retry:
+  attempts: 3
+  delay: 50ms
+  backoff: 2.0
+
+s3:
+  bucket_name: "images"
