@@ -1,5 +1,6 @@
 server:
   gin_mode: ""
+  port: 8080
 
 retry:
   attempts: 3
@@ -8,3 +9,14 @@ retry:
 
 s3:
   bucket_name: "images"
+
+kafka:
+  brokers:
+    - "localhost:9092"
+
+  topic: "images"
+
+db:
+  max_open_conns: 10
+  max_idle_conns: 5
+  conn_max_lifetime: 30m
