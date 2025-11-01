@@ -13,8 +13,9 @@ s3:
 kafka:
   brokers:
     - "localhost:9092"
-
+    
   topic: "images"
+  group_id: 1
 
 db:
   max_open_conns: 10

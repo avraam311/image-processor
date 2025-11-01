@@ -12,6 +12,10 @@ import (
 
 type HandlerImage struct{}
 
+func New() *HandlerImage {
+	return &HandlerImage{}
+}
+
 func (h *HandlerImage) ProcessImage(im []byte, processing string) ([]byte, error) {
 	srcImg, err := jpeg.Decode(bytes.NewReader(im))
 	if err != nil {
