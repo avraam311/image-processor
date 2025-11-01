@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 )
 
 const (
@@ -23,6 +24,8 @@ func (r *Repository) CheckImage(ctx context.Context, id uint) error {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrImageNotFound
 		}
+
+		return fmt.Errorf("repository/check_image.go - failed to check image - %w", err)
 	}
 	if status == statusInProcess {
 		return ErrImageInProcess

@@ -3,8 +3,10 @@ module github.com/avraam311/image-processor
 go 1.24.6
 
 require (
+	github.com/disintegration/imaging v1.6.2
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/minio/minio-go v6.0.14+incompatible
+	github.com/segmentio/kafka-go v0.4.49
 	github.com/wb-go/wbf v0.0.8
 )
 
@@ -39,7 +41,6 @@ require (
 	github.com/rs/zerolog v1.30.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
-	github.com/segmentio/kafka-go v0.4.37 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
@@ -53,6 +54,7 @@ require (
 	golang.org/x/arch v0.18.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
+	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.26.0 // indirect

@@ -12,7 +12,7 @@ import (
 type Repository interface {
 	SetImageStatus(context.Context, string) (uint, error)
 	CheckImage(context.Context, uint) error
-	ChangeImageStatus(context.Context, uint) error
+	DeleteImage(context.Context, uint) error
 }
 
 type Service struct {
