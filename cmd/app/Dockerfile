@@ -6,7 +6,7 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o app ./cmd/main.go
+RUN go build -o app ./cmd/app/main.go
 
 FROM alpine AS runner
 

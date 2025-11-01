@@ -34,7 +34,7 @@ func (s *Service) UploadImage(ctx context.Context, im *models.Image) (uint, erro
 	if err != nil {
 		return 0, fmt.Errorf("service/upload_image.go - failed to marshal id into json - %w", err)
 	}
-	imageValue, err := json.Marshal(im.Processing)
+	imageValue, err := json.Marshal(im)
 	if err != nil {
 		return 0, fmt.Errorf("service/upload_image.go - failed to marshal processing into json - %w", err)
 	}
@@ -49,7 +49,7 @@ func (s *Service) UploadImage(ctx context.Context, im *models.Image) (uint, erro
 	putObjectOptions := minio.PutObjectOptions{
 		ContentType: imageFormat,
 	}
-	_, err = s.s3.PutObject(s.cfg.GetString("s3.bucket_name"), objectName, imageAsReader, size, putObjectOptions)
+	_, err = s.s3.Minio.PutObject(s.cfg.GetString("s3.bucket_name"), objectName, imageAsReader, size, putObjectOptions)
 	if err != nil {
 		return 0, fmt.Errorf("service/upload_image.go - failed to put image in s3 - %w", err)
 	}

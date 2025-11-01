@@ -10,6 +10,7 @@ import (
 
 	handlers "github.com/avraam311/image-processor/internal/api/handlers/images"
 	"github.com/avraam311/image-processor/internal/api/server"
+	"github.com/avraam311/image-processor/internal/infra/minio"
 	repository "github.com/avraam311/image-processor/internal/repository/images"
 	service "github.com/avraam311/image-processor/internal/service/images"
 
@@ -19,7 +20,6 @@ import (
 	"github.com/wb-go/wbf/zlog"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/minio/minio-go"
 )
 
 const (
@@ -60,19 +60,22 @@ func main() {
 	}
 
 	kafkaProd := kafka.NewProducer(cfg.GetStringSlice("kafka.brokers"), cfg.GetString("kafka.topic"))
-	minioEndpoint := cfg.GetString("MINIO_HOST" + ":" + "MINIO_PORT")
-	minioAccessKey := cfg.GetString("MINIO_ACCESS_KEY")
-	minioSecret := cfg.GetString("MINIO_SECRET")
+	minioEndpoint := cfg.GetString("MINIO_HOST") + ":" + cfg.GetString("MINIO_PORT")
+	minioUser := cfg.GetString("MINIO_ROOT_USER")
+	minioPassword := cfg.GetString("MINIO_ROOT_PASSWORD")
 	minioSSL := cfg.GetBool("MINIO_SSL")
-	minioClient, err := minio.New(minioEndpoint, minioAccessKey, minioSecret, minioSSL)
+	minioBucketName := cfg.GetString("s3.bucket_name")
+	minioLocation := cfg.GetString("s3.location")
+	minioClient, err := minio.New(minioEndpoint, minioUser, minioPassword, minioBucketName, minioLocation, minioSSL)
 	if err != nil {
-		zlog.Logger.Fatal().Err(err).Msg("failed to initialize minio client")
+		zlog.Logger.Fatal().Err(err).Msg("failed to initialize minio")
 	}
+
 	repo := repository.NewRepository(db)
 	srvc := service.NewService(repo, kafkaProd, cfg, minioClient)
 	hand := handlers.NewHandler(srvc, val)
 
-	router := server.NewRouter(cfg.GetString("api.gin_mode"), hand)
+	router := server.NewRouter(cfg.GetString("server.gin_mode"), hand)
 	srv := server.NewServer(cfg.GetString("server.port"), router)
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {

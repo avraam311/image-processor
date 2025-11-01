@@ -18,7 +18,7 @@ func (s *Service) GetProcessedImage(ctx context.Context, id uint) ([]byte, error
 
 	getObjectOptions := minio.GetObjectOptions{}
 	objectName := strconv.Itoa(int(id))
-	object, err := s.s3.GetObject(s.cfg.GetString("s3.bucket_name"), objectName, getObjectOptions)
+	object, err := s.s3.Minio.GetObject(s.cfg.GetString("s3.bucket_name"), objectName, getObjectOptions)
 	if err != nil {
 		return []byte{}, fmt.Errorf("service/images - failed to get image from s3 - %w", err)
 	}

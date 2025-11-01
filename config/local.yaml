@@ -1,6 +1,6 @@
 server:
   gin_mode: ""
-  port: 8080
+  port: ":8080"
 
 retry:
   attempts: 3
@@ -9,10 +9,11 @@ retry:
 
 s3:
   bucket_name: "images"
+  location: ""
 
 kafka:
   brokers:
-    - "localhost:9092"
+    - "kafka:9092"
     
   topic: "images"
   group_id: 1

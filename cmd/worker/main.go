@@ -7,15 +7,14 @@ import (
 	"syscall"
 
 	"github.com/avraam311/image-processor/internal/infra/handlers/images"
+	"github.com/avraam311/image-processor/internal/infra/kafka"
+	"github.com/avraam311/image-processor/internal/infra/minio"
 	"github.com/avraam311/image-processor/internal/infra/worker"
 	repository "github.com/avraam311/image-processor/internal/repository/images"
 
 	"github.com/wb-go/wbf/config"
 	"github.com/wb-go/wbf/dbpg"
-	"github.com/wb-go/wbf/kafka"
 	"github.com/wb-go/wbf/zlog"
-
-	"github.com/minio/minio-go"
 )
 
 const (
@@ -54,14 +53,16 @@ func main() {
 		zlog.Logger.Fatal().Err(err).Msg("failed to connect to database")
 	}
 
-	kafkaCons := kafka.NewConsumer(cfg.GetStringSlice("kafka.brokers"), cfg.GetString("kafka.topic"), cfg.GetString("kafka.group_id"))
-	minioEndpoint := cfg.GetString("MINIO_HOST" + ":" + "MINIO_PORT")
-	minioAccessKey := cfg.GetString("MINIO_ACCESS_KEY")
-	minioSecret := cfg.GetString("MINIO_SECRET")
+	kafkaCons := kafka.New(cfg.GetStringSlice("kafka.brokers"), cfg.GetString("kafka.topic"), cfg.GetString("kafka.group_id"))
+	minioEndpoint := cfg.GetString("MINIO_HOST") + ":" + cfg.GetString("MINIO_PORT")
+	minioUser := cfg.GetString("MINIO_ROOT_USER")
+	minioPassword := cfg.GetString("MINIO_ROOT_PASSWORD")
 	minioSSL := cfg.GetBool("MINIO_SSL")
-	minioClient, err := minio.New(minioEndpoint, minioAccessKey, minioSecret, minioSSL)
+	minioBucketName := cfg.GetString("s3.bucket_name")
+	minioLocation := cfg.GetString("s3.location")
+	minioClient, err := minio.New(minioEndpoint, minioUser, minioPassword, minioBucketName, minioLocation, minioSSL)
 	if err != nil {
-		zlog.Logger.Fatal().Err(err).Msg("failed to initialize minio client")
+		zlog.Logger.Fatal().Err(err).Msg("failed to initialize minio")
 	}
 	handIm := images.New()
 	repo := repository.NewRepository(db)
@@ -82,7 +83,7 @@ func main() {
 		}
 	}
 
-	if err := kafkaCons.Close(); err != nil {
+	if err := kafkaCons.Cons.Close(); err != nil {
 		zlog.Logger.Error().Err(err).Msg("failed to close kafka consumer")
 	}
 }
