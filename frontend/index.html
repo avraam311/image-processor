@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processor Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Processor</h1>
+    <form id="uploadForm">
+        <label for="image">Select Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+
+        <label for="processing">Processing Type:</label>
+        <select id="processing" name="processing" required>
+            <option value="resize:100x100">Resize to 100x100</option>
+            <option value="resize:200x200">Resize to 200x200</option>
+            <option value="grayscale">Grayscale</option>
+            <option value="blur:5">Blur (radius 5)</option>
+        </select>
+
+        <button type="submit">Upload and Process</button>
+    </form>
+
+    <div id="status"></div>
+    <div id="result" class="result"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
